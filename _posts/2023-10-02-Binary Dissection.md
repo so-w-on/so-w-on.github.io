@@ -2,8 +2,6 @@
 title: Binary Dissection
 author: Mouna
 date: 2023-10-02 10:00:00 +0000
-categories: [Binary, Computer Architecture]
-tags: [Binary]
 ---
 
 This article will discuss binary files' specificities that one may encounter. The article is structured as a walkthrough of the first few steps of a binary exploitation or reverse engineering.
