@@ -19,8 +19,12 @@ $ file binary
 # Binary Protections
 
 ## NX
+> In Windows, NX is refered to as `DEP` or Data Execution Prevention.
+{: .prompt-info }
+
 NX stands for `No eXecute`. The NX is a bit that when activated, prevents us from executing certain parts of Memory like Heap and stack. It also prevents from writting into certain parts of Memory such as the code section.
 > What this entails when trying to exploit a binary is that it becomes impossible to just feed the exploit payload to the executable. Because whatever user input we pass, it will stay in a No eXecute zone and it will be considered as non-executable data.
+But of course, researchers found a way to work around this: Return-Oriented Programming (You can check the 01/12/23 article).
 
 ## PIE
 PIE stands fro `Position Independant Executable`. When enabled, this technique randomizes the base address everytime 
