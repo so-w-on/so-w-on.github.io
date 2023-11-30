@@ -44,3 +44,7 @@ $ checksec binary
 ```bash
 $ cutter binary
 ```
+3. Using `rabin2`
+```bash
+$ rabin2 binary
+```
