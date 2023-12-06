@@ -1,11 +1,14 @@
+# Introduction
+A Simple Buffer Overflow is useful when The NX and ASLR protections aren't activated. This is pretty much only possible in CTF pwn challenges. These protections have become much more commun, which is why Binary Experts have found new ways to bypass them. ROP or Return-Oriented Programming is one of these techniques.
+
 Return-Oriented Programming is a technique that consists in using code pre-existing in the binary and chaining it together to form a desired chain of commands that will perform the desired instructions.
 > As an example of pre-existing code, we have the "/bin/sh" command, the "system" function ...
 
-## Gadgets
+# Gadgets
 These chunks of "pre-existing code" are known as `gadgets`. A gadget, is code that exists in the program itself or in the libraries used by the program. It has the following form: `[instruction sequence]; ret`.
 : These are gadget examples: `pop eax; ret`, `add eax, ebx; pop ebx; ret`, ...
 
-To find usable gadgets along with their addresses, use the following:
+To find usable gadgets in the binary file along with their addresses, use the following:
 
 ```bash
 $ ROPgadget --binary bin_file
@@ -40,7 +43,8 @@ $strings -a -t x /lib32/libc.so.6 | grep /bin/sh
 	> Output:
 	> offset_from_libc_base_@ /bin/sh
 ```
-## The ret instruction
+
+# The ret instruction
 This technique takes its name from the return instruction, so it is only fair we give some details about this one specific instruction.
 
 Reminder:
@@ -57,13 +61,16 @@ When `ret` is executed, it pops the value pointed to by the stack pointer and pl
 Here is an illustration to better visualize things:
 TODO: Drawing
 
-## Exploit outline
+# Case-By-Case ROP Use Cases
+The following will be use cases of ROP depending on the protections that the binary has:
+
+## ASLR with no NX:
+
+
+# Exploit outline
 The payload used in executing a ROP exploit is constructed as follows:
 
-### For a 32-bit binary file:
+## For a 32-bit binary file:
 
-### For a 64-bit binary file:
+## For a 64-bit binary file:
 
-## Ret2libc exploit:
-This exploit is a ROP focused on functions within the library libc used by the binary file.
-The payload used in executing a Ret2libc exploit is constructed as follows:

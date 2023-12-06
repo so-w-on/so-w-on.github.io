@@ -48,3 +48,18 @@ $ cutter binary
 ```bash
 $ rabin2 binary
 ```
+
+## Basic Binary Structure
+
+A binary file is structured in different sections:
+### .text
+Contains the code of the binary.
+### .plt
+
+### .got
+
+### .bss
+Contains static variables.
+### .data
+Contains non-static variables.
+
