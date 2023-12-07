@@ -19,31 +19,6 @@ or, to search for a more specific keyword (`rdi`, ...)
 $ ROPgadget --binary bin_file | grep keyword
 ```
 
-## Library gadget
-Sometimes, we need some gadgets that aren't within the program itself, but that exist in the libraries it uses. In this article, we will talk about the C library (libc) and specifically about two gadgets `system` and `/bin/sh`, that can respectively execute any command passed to it and call a shell.
-To find gadgets within the library , say `system` or `/bin/sh` for example, we us ethe following commands:
-
-1. First, get the libraries used by the binary and their base addresses:
-```bash
-$ldd bin_file
-	> Output:
-	> <some libraries> <Their addresses>
-	> libc.so.6 => /lib32/libc.so.6 (address of libc)
-	> (*or /lib/x86_64-linux-gnu/libc.so.6 for 64-bit*)
-```
-2. Then get the offset from the libc base address of `system()`:
-```bash
-$readelf -s /lib32/libc.so.6 | grep system
-	> Output:
-	> number: offset_from_libc_base_@  <other......
-```
-3. Then get the offset from the libc base address of `/bin/sh`:
-```bash
-$strings -a -t x /lib32/libc.so.6 | grep /bin/sh
-	> Output:
-	> offset_from_libc_base_@ /bin/sh
-```
-
 # The ret instruction
 This technique takes its name from the return instruction, so it is only fair we give some details about this one specific instruction.
 

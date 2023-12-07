@@ -16,7 +16,10 @@ To see how this attack is performed, we will use a dummy vulnerable code and see
 
 # Use Cases:
 A buffer Overflow is very useful in diverting the program's normal execution flow.
-When the buffer overflows, it overwrites part of the stack, and with careful calculations, we can overwrite the EIP/RIP register which tells holds the next address to be executed. We can then put the address of a certain pre-existing function that we want to run in the EIP, or we can make the EIP point to a shellcode we provide as part of the buffer.
+
+Careful Calculations go into play when trying to make a buffer overflow useful, that is because if we overwrite the EIP/RIP register (which supposedly holds the next address to be executed) with random characters, we will run into a segmentation fault, since the "address" in the EIP/RIP register doesn't point to anything readable and/or executable.
+
+That is why we need to carefully craft our payload (user-input), so we can put the address of a certain pre-existing function that we want to run in the EIP, or we can make the EIP point to a shellcode we provide as part of the buffer.
 
 Below we can see both the payload (user-input) that lets us do these modifications and how that changes the stack and the code execution flow.
 
@@ -24,7 +27,7 @@ Below we can see both the payload (user-input) that lets us do these modificatio
 
 ## Classic Buffer Overflow : 
 
-# Shortcomming
+# Shortcommings
 This attack only works if both NX and ASLR are disabled, which is most probably never the case.
 * When NX is enabled, but ASLR disabled, we can use the Ret2libc technique.
 * When NX and ASLR are both enabled, we use the big guns: the ROP (Return-Oriented Programming) technique.

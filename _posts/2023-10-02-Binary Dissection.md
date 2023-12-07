@@ -63,3 +63,10 @@ Contains static variables.
 ### .data
 Contains non-static variables.
 
+### Specifications of every section:
+Using the following command:
+
+```bash
+$ readelf -S binary
+```
+we can determine for each section if it's Writable, eXecutable, ...
