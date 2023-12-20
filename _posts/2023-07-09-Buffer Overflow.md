@@ -4,7 +4,9 @@ This article will explain Stack-based buffer Overflow attacks in its simplest fo
 The absence of both protections is quite rare, but quite popular in entry-level binary exploitation ctf challenges.
 
 # Attack Vector
-This attack is possible when a program uses a vulnerable function to accept user input without input size check.
+This attack is possible when a program uses a vulnerable function to accept user input without input size check, and stores that input in memory.
+When the user-input is stored into memory, it goes beyond the space allocated to the buffer and overwrites adjacent memory spaces.
+When the EIP/RIP register gets overwritten, a segmentation fault occurs because the new value that the EIP/RIP register contains may not be a valid memory address that points to a valid memory space.
 : By "vulnerable function" I mean functions that don't limit the number of characters read from use input. For example: `gets`, `scanf`, `strcpy`, `strcat`, `sprintf`, `vsprintf`,`snprintf`, `syslog`.
 
 # A step-by-step of a stack-Buffer Overflow:
@@ -17,13 +19,13 @@ To see how this attack is performed, we will use a dummy vulnerable code and see
 # Use Cases:
 A buffer Overflow is very useful in diverting the program's normal execution flow.
 
-Careful Calculations go into play when trying to make a buffer overflow useful, that is because if we overwrite the EIP/RIP register (which supposedly holds the next address to be executed) with random characters, we will run into a segmentation fault, since the "address" in the EIP/RIP register doesn't point to anything readable and/or executable.
+Careful Calculations go into play when trying to make a buffer overflow useful, that is because if we overwrite the EIP/RIP register (which supposedly holds the next address to be executed) with random characters, we will run into a segmentation fault, since the new "address" in the EIP/RIP register doesn't point to anything readable and/or executable.
 
-That is why we need to carefully craft our payload (user-input), so we can put the address of a certain pre-existing function that we want to run in the EIP, or we can make the EIP point to a shellcode we provide as part of the buffer.
+That is why we need to carefully craft our payload (user-input), so we can put the address of a certain pre-existing function that we want to run in the EIP/RIP, or we can make the EIP/RIP point to a shellcode we provide as part of the buffer.
 
 Below we can see both the payload (user-input) that lets us do these modifications and how that changes the stack and the code execution flow.
 
-## Ret2win : Buffer Overflow to execute a win() pre-existing function:
+## Ret2win : Buffer Overflow to execute a, "win()", pre-existing function:
 
 ## Classic Buffer Overflow : 
 
