@@ -18,16 +18,6 @@ or, to search for a more specific keyword (`rdi`, ...)
 $ ROPgadget --binary bin_file | grep keyword
 ```
 
-# Case-By-Case ROP Use Cases
-The following will be use cases of ROP depending on the protections that the binary has:
-
-## ASLR with no NX:
-
-
 # Exploit outline
 The payload used in executing a ROP exploit is constructed as follows:
-
-## For a 32-bit binary file:
-
-## For a 64-bit binary file:
 
