@@ -165,21 +165,31 @@ In this example, we have a `preprod-payroll.sowon.mold` subdomain that should be
 To escalate previleges, a common approach is to search for databases or their files, especially the ones that may contain passwords. This is why we should look for services such as SQL that are running on a vulnerable version, or Keepass files.
 
 * For any database file encountered, run a `strings db_file` to look for any useful information that may be loosely encrypted and secured. 'strings' is a better choice than 'cat' because of the type fo these files.
+
 * If a KDBX file is encountered while lokking to escalate privileges, use this script to get the master key of the keepass dump file : <https://github.com/matro7sh/keepass-dump-masterkey/blob/main/poc.py> 
+
 * If an SQL database is present, which is mostly the case when the box hosts webservers, look up if there are any vulnerabilities specific to that sql version.
+
 * If it's possible, access the SQL database and search through the tables for something interesting like `users` or `credentials` etc...
 ## Privilege Escalation
 The following is a command that should always be ran when we have an initial access to a box and are trying to get higher privileges:
 
 ```bash
-sudo -l
+$ sudo -l
 ```
-The output is all the commands and scripts that the current user can run as sudo. This usually helps us get a sudo shell, which is our goal.
+The output is all the commands and scripts that the current user can run as sudo. This usually helps us get a sudo shell; which is our goal.
 
 ## Windows box
 Sometimes we encounter Windows boxes instead of Linux-based ones.
 
 The initial step is the same: a discovery using nmap.
 
-### SMB : 
-This is a 
+### Server Message Block (SMB)
+A very intresting network service that is typically found on port 445. This service may give us access to sensitive files that can be present on SMB shares.
+
+To exploit this, we usually proceed by first an SMB enumeration, then connecting to the SMB share of interest.
+```bash
+$ enum4linux -a 10.13.37.10
+$ smbclient //10.13.37.10/share_of_interest -U name -p port
+```
+
