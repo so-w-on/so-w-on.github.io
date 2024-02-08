@@ -1,3 +1,10 @@
+---
+title: Anatomy of a Box Writeup
+author: Mouna
+date: 2024-01-01 11:33:00 +0800
+categories: [CTF, Writeup]
+tags: [CTF]
+---
 ## Introduction
 In hack the box, root-me and similar war-game security challenges, we often follow an identical pattern when trying to get a certain flag from the so called "boxes".
 
