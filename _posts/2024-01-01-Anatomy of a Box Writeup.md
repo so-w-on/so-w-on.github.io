@@ -1,7 +1,7 @@
 ## Introduction
 In hack the box, root-me and similar war-game security challenges, we often follow an identical pattern when trying to get a certain flag from the so called "boxes".
 
-In this article, I will try to outline this pattern in what I would like to call a ctf mold, or a like the title states an "Anatomy of a box writeup".
+In this article, I will try to outline this pattern in what I would like to call a ctf mold, or, like the title states, an "Anatomy of a box writeup".
 
 In this article, we consider that we are connected to a vpn that allows us to interact with the network of the victim machine. This victim machine will have the following ip address : 10.13.37.10
 
@@ -12,7 +12,7 @@ In most CTF challenges, a vpn file is given.
 ## Discovery
 The starting point is almost always the same : Enumerate to discover the open ports that may help us get an initial foothold in the machine. After all, at this point all we have is an ip address and a challenge title (that sometimes contains some hints).
 
-To do so, we run nmap as follows:
+To do so, we run `nmap` as follows:
 ```bash
 $ nmap -n -Pn -sV 10.13.37.10
     PORT        STATE SERVICE VERSION
@@ -43,20 +43,26 @@ $ sudo echo '10.13.37.10 sowon.mold' >> /etc/hosts
 Once in the webpage, check all pages and look for webpages that are of interest: a login page, a file submission page, some known web-building block (wordpress, joomla, Spring boot and actuators...)
 
 ### Login Page
-The first step is to look for credentials in source code and maybe try to use an SQL injection by trying the payload `‘ or 1=1 — -`.Otherwise use `burp` to bruteforce for default credentials.
+The first step is to look for credentials in source code and maybe try to use an `SQL injection` by trying the payload `‘ or 1=1 — -`.Otherwise use `burp` to bruteforce for default credentials.
 
 If the website is based on a known ticket management system, a content management system or similar, look online for possible default credentials and try them, or for possible past vulnerable versions.
 
 : Examples of default credentials are: admin/admin, user/password, root/password etc...
+
+### Known CMS (Content Management System)
+The first thing to do is to search online for known vuulnerabilities and exploits. To do that we can search for `name_of_CMS used_version CVE exploit`.
+
+#### Joomla CMS
+When a Joomla CMS based website is encountered, `joomscan` is a very useful tool that can help us get a lot of information, including credentials that may be used later for privilege escalation.
 
 ### File upload page
 When a webpage allows file upload, an attacker can upload a file containing malicious code and run it.
 
 Some of these webpages are protected by black-listing some file extensions, but that can easily be bypassed. Some techniques include doubling extensions `file.png.php` or adding null-bytes `file.php%00.png`
 
-When we can upload files, always think of reverse shells php that can be submitted.
+When we can upload files, always think of reverse shell php files.
 
-You can also use ready-to-use ones like the ones found here: <https://pentestmonkey.net/tools/web-shells/php-reverse-shell>
+You can use ready-to-use ones like the one found here: <https://pentestmonkey.net/tools/web-shells/php-reverse-shell>
 
 #### php code for reverse shell
 An example of php code that can be injected to retrieve a reverse shell on port 9001 is:
@@ -90,12 +96,6 @@ By inspecting the Network exchange we get a base64 response (stored in `response
 $ echo responsebase64characters | base64 -d
 ```
 
-### Known CMS (Content Management System)
-The first thing to do is to search online for known vuulnerabilities and exploits. To do that we can search for `name_of_CMS used_version CVE exploit`.
-
-#### Joomla CMS
-When a Joomla CMS based website is encountered, joomscan is a very useful tool that can help us get a lot of information, including credentials that may be used later for privilege escalation.
-
 ### Brute-force enumeration of directories and files
 This is a technique that uses known wordlists to brute-force for files and directories hosted in the webserver and that aren't directly accessible by the user from the previous webpage.
 
@@ -107,7 +107,7 @@ $ dirb http://sowon.mold
 $ dirsearch -u http://sowon.mold
 ```
 ```bash
-$ gobuster todo!
+$ gobuster dir -u http://sowon.mold -w /wordlists/Discovery/Web-Content/common.txt
 ```
 
 We can also check for virtual hosts, which are directories and files that are hosted in virtual environments and have a different DNS subdomain:
@@ -162,15 +162,16 @@ sowon.mold.       604800  IN      SOA     www.sowon.mold. sowon.mold. 2 604800 8
 In this example, we have a `preprod-payroll.sowon.mold` subdomain that should be added to our `/etc/hosts` file and inspected as well.
 
 ## Databases : SQL, KeePass, ...
-To escalate previleges, a common approach is to search for databases or their files, especially the ones that may contain passwords. This is why we should look for services such as SQL that are running on a vulnerable version, or Keepass files.
+To escalate privileges, a common approach is to search for databases or their files, especially the ones that may contain passwords. This is why we should look for services such as SQL that are running on a vulnerable version, or Keepass files.
 
-* For any database file encountered, run a `strings db_file` to look for any useful information that may be loosely encrypted and secured. 'strings' is a better choice than 'cat' because of the type fo these files.
+* For any database file encountered, run a `strings db_file` to look for any useful information that may be loosely encrypted and secured. `strings` is a better choice than `cat` because of the type of these files.
 
-* If a KDBX file is encountered while lokking to escalate privileges, use this script to get the master key of the keepass dump file : <https://github.com/matro7sh/keepass-dump-masterkey/blob/main/poc.py> 
+* If a KDBX file is encountered while looking to escalate privileges, use this script to get the master key of the keepass dump file : <https://github.com/matro7sh/keepass-dump-masterkey/blob/main/poc.py> . This key will help us log into the keepass file and view all saved passwords.
 
 * If an SQL database is present, which is mostly the case when the box hosts webservers, look up if there are any vulnerabilities specific to that sql version.
 
 * If it's possible, access the SQL database and search through the tables for something interesting like `users` or `credentials` etc...
+
 ## Privilege Escalation
 The following is a command that should always be ran when we have an initial access to a box and are trying to get higher privileges:
 
@@ -179,17 +180,11 @@ $ sudo -l
 ```
 The output is all the commands and scripts that the current user can run as sudo. This usually helps us get a sudo shell; which is our goal.
 
-## Windows box
-Sometimes we encounter Windows boxes instead of Linux-based ones.
-
-The initial step is the same: a discovery using nmap.
-
-### Server Message Block (SMB)
-A very intresting network service that is typically found on port 445. This service may give us access to sensitive files that can be present on SMB shares.
-
-To exploit this, we usually proceed by first an SMB enumeration, then connecting to the SMB share of interest.
-```bash
-$ enum4linux -a 10.13.37.10
-$ smbclient //10.13.37.10/share_of_interest -U name -p port
-```
-
+## Conclusion
+The main steps to follow using this Writeup anatomy are: 
+1. Network Discovery to assess the target machine.
+2. Exploring every available information to gain more information.
+3. Eventually gaining a low-privilege access.
+4. Gaining more information.
+5. Privilege Escalation.
+I think it's very important to follow a tutorial or writeup on how to root one's first box. However, I think that even for a complete beginner, generalized tutorials are way more helpful in the long run. I hope this covers enough ground to root a couple of easy to medium boxes.
