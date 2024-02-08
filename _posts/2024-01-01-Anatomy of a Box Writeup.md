@@ -43,7 +43,7 @@ $ sudo echo '10.13.37.10 sowon.mold' >> /etc/hosts
 Once in the webpage, check all pages and look for webpages that are of interest: a login page, a file submission page, some known web-building block (wordpress, joomla, Spring boot and actuators...)
 
 ### Login Page
-The first step is to look for credentials in source code, if none are found look for default credentials online, otherwise use burp to bruteforce for default credentials.
+The first step is to look for credentials in source code and maybe try to use an SQL injection by trying the payload `‘ or 1=1 — -`.Otherwise use `burp` to bruteforce for default credentials.
 
 If the website is based on a known ticket management system, a content management system or similar, look online for possible default credentials and try them, or for possible past vulnerable versions.
 
@@ -141,7 +141,7 @@ $ dig -x 10.13.37.10 @10.13.37.10
 ;; WHEN: Fri Jan 05 09:21:21 EST 2024
 ;; MSG SIZE  rcvd: 109
 ```
-For this example, the Authority section is interesting since it shows the www.sowon.mold address which is another webpage that may be of interest to us.
+For this example, the Authority section is interesting since it shows the `www.sowon.mold` address which is another webpage that may be of interest to us.
 
 ```bash
 $ dig axfr sowon.mold @10.13.37.10
@@ -152,13 +152,14 @@ sowon.mold.       604800  IN      SOA     www.sowon.mold. sowon.mold. 2 604800 8
 sowon.mold.       604800  IN      NS      www.sowon.mold.
 sowon.mold.       604800  IN      A       10.13.37.10
 www.sowon.mold.   604800  IN      A       10.13.37.10
+preprod-payroll.sowon.mold  604800  IN      CNAME       sowon.mold
 sowon.mold.       604800  IN      SOA     www.sowon.mold. sowon.mold. 2 604800 86400 2419200 604800
 ;; Query time: 155 msec
 ;; SERVER: 10.13.37.10##53(10.13.37.10) (TCP)
 ;; WHEN: Fri Jan 05 09:21:27 EST 2024
 ;; XFR size: 5 records (messages 1, bytes 167)
 ```
-TODO : DNS examples from other walkthroughs are probably better
+In this example, we have a `preprod-payroll.sowon.mold` subdomain that should be added to our `/etc/hosts` file and inspected as well.
 
 ## Databases : SQL, KeePass, ...
 To escalate previleges, a common approach is to search for databases or their files, especially the ones that may contain passwords. This is why we should look for services such as SQL that are running on a vulnerable version, or Keepass files.
