@@ -194,4 +194,6 @@ The main steps to follow using this Writeup anatomy are:
 3. Eventually gaining a low-privilege access.
 4. Gaining more information.
 5. Privilege Escalation.
-I think it's very important to follow a tutorial or writeup on how to root one's first box. However, I think that even for a complete beginner, generalized tutorials are way more helpful in the long run. I hope this covers enough ground to root a couple of easy to medium boxes.
+
+> I think it's very important to follow a tutorial or writeup on how to root one's first box. However, I think that even for a complete beginner, generalized tutorials are way more helpful in the long run. I hope this covers enough ground to root a couple of easy to medium boxes.
+{: .prompt-info }
