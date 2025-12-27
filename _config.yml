@@ -42,7 +42,7 @@ social:
     - https://github.com/so-w-on # change to your github homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
-    # - https://www.linkedin.com/in/username
+    - https://www.linkedin.com/in/mouna-wamra
 
 google_site_verification: # fill in to your verification string
 
@@ -185,10 +185,10 @@ exclude:
   - package*.json
 
 jekyll-archives:
-  enabled: false
-  #layouts:
-  #  category: category
+  enabled: true
+  layouts:
+    category: category
   #  tag: tag
-  #permalinks:
+  permalinks:
   #  tag: /tags/:name/
-  #  category: /categories/:name/
+    category: /projects/:name/
