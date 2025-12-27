@@ -1,7 +1,7 @@
 ---
 # the default layout is 'page'
 icon: fas fa-info-circle
-order: 4
+order: 3
 ---
 
 This website is a means to document some of my cybersecurity and tech notes that I take while studying new topics or doing wargame challenges like Hack The Box or Root-Me.

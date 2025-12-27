@@ -19,7 +19,7 @@ title: So-w-on's Notes # the main title
 tagline: A collection of notes about Cybersecurity # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
-  I'm a Cybersecurity student and enthusiast. I'm interested in Cyber-Physical Systems, Security of IoT and embedded systems, Secure Communication and Binary exploitation.
+  Embedded Cybersecurity Engineer | IoT & Automotive Security. I'm interested in Cyber-Physical Systems, Security of IoT and embedded systems, Secure Communication, Reverse Engineering, Firmware Analysis, and that's quite the list ...
 
 # Fill in the protocol & hostname for your site.
 # e.g. 'https://username.github.io', note that it does not end with a '/'.
@@ -63,7 +63,7 @@ google_analytics:
 #     light  - Use the light color scheme
 #     dark   - Use the dark color scheme
 #
-theme_mode: dark # [light|dark]
+theme_mode: light # [light|dark]
 
 # The CDN endpoint for images.
 # Notice that once it is assigned, the CDN url
