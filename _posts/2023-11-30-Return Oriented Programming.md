@@ -1,3 +1,9 @@
+---
+title: Return Oriented Programming
+author: Mouna
+date: 2023-11-30 10:00:00 +0800
+categories: [Memory Corruption Techniques]
+---
 # Introduction
 A Simple Buffer Overflow is useful when The NX and ASLR protections aren't activated. Nowadays, this is pretty much only possible in CTF pwn challenges. These protections have become much more commun, which is why Binary Experts have found new ways to bypass them. ROP or Return-Oriented Programming is one of these techniques.
 

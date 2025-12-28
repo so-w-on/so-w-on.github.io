@@ -1,3 +1,9 @@
+---
+title: Buffer Overflow
+author: Mouna
+date: 2023-07-09 10:00:00 +0800
+categories: [Memory Corruption Techniques]
+---
 # Introduction
 This article will explain Stack-based buffer Overflow attacks in its simplest forms, i.e. when the attack is performed on a binary that doesn't have NX nor ASLR protections.
 

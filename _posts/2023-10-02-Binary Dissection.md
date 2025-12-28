@@ -1,3 +1,9 @@
+---
+title: Binary dissection
+author: Mouna
+date: 2023-10-02 10:00:00 +0800
+categories: [Binary & Memory Internals]
+---
 This article will discuss binary files' specificities that one may encounter. The article is structured as a walkthrough of the first few steps of a binary exploitation or reverse engineering.
 The article will therefore provide useful commands that will help us dissect the binary and understand its format.
 
