@@ -4,6 +4,13 @@ icon: fas fa-info-circle
 order: 3
 ---
 
-This website is a means to document some of my cybersecurity discoveries that I take while studying new topics or doing wargame challenges like Hack The Box or Root-Me.
-As for me, I'm a Graduate Engineering student majoring in Cybersecurity. I love taking notes of every single thing I learn; it helps me find the general skeleton of the topic.
+This website is a means to document cybersecurity topics I've learned.
+I'm a cybersecurity engineer with a thing for note taking (it helps me find the general skeleton and follow a specific thread)
 
+I've also recently taken up the hobby of reading cybersecurity books:
+
+| Book                         | State            | Tags |
+| :--------------------------- | :--------------- | ------: |
+| The Car hacker's handbook          | Done     | Automotive, CAN |
+| Making Embedded Systems               | Ongoing    |      Embedded systems, RTOS, Hardware |
+| The Art of Memory Forensics: Detecting Malware and Threats in Windows, Linux, and Mac Memory| On-Off |   Malware, Memory, Volatility |
