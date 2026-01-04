@@ -9,8 +9,8 @@ I'm a cybersecurity engineer with a thing for note taking (it helps me find the 
 
 I've also recently taken up the hobby of reading cybersecurity books:
 
-| Book                         | State            | Tags |
-| :--------------------------- | :--------------- | ------: |
-| The Car hacker's handbook          | Done     | Automotive, CAN |
-| Making Embedded Systems               | Ongoing    |      Embedded systems, RTOS, Hardware |
-| The Art of Memory Forensics: Detecting Malware and Threats in Windows, Linux, and Mac Memory| On-Off |   Malware, Memory, Volatility |
+| Book                         | State            | Author | Tags |
+| :--------------------------- | :--------------- | -----------: | ------: |
+| The Car Hacker's Handbook: A Guide for the Penetration Tester          | Done     | Craig Smith | Automotive, CAN |
+| Making Embedded Systems               | Ongoing    |  Elicia White |   Embedded systems, RTOS, Hardware |
+| The Art of Memory Forensics: Detecting Malware and Threats in Windows, Linux, and Mac Memory| On-Off | Michael Hale Ligh, Andrew Case, Jamie Levy, Aaron Walters |  Malware, Memory, Volatility |
