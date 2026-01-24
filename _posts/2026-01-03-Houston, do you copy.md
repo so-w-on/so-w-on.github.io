@@ -87,6 +87,8 @@ Below are the different components in the system we are analyzing, their functio
 - Expected latency: *on the way!*
 
 # Observation phase
+The goal in this phase is to establish a baseline communication behavior between the Flight Controller (FC) and the Ground Control Station (GCS).
+
 ## Passive traffic capture method:
 An efficient attacker knows to do nothing and only listen at the first phase. We will do the same here.
 *on the way!*
