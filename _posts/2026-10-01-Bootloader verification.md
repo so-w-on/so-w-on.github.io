@@ -24,7 +24,7 @@ We will be building on this squeletton so if it's not so clear, the ControllersT
 In the next steps, we will switch out the crc32 for a sha256 function. Then add a signature to ensure authenticity of the header.
 (In the next blog, we will go beyond classical algorithms and explore the possibility of using PQC-robust ones.)
 
-![Desktop View](/assets/img/bootloader/BootLogicCRC.png){: width="486" height="295".w-50 .right}
+![Desktop View](/assets/img/bootloader/BootLogicCRC.png){: width="972" height="589"}
 
 # SHA256
 The logic as was defined in the tutorial makes it quite easy to swap out the crc32 for sha256.
@@ -43,5 +43,15 @@ typedef struct
 
 2. We will change the header_fill to calculate the sha256 digest instead of crc32 for the application integrity, which will then be added to the header of the application.
 
+The header_fill file stays pretty much the same aside from the swap to sha256 in the ahshing logic (Check the file in the github repo for more implementation specification)
+![Desktop View](/assets/img/bootloader/hash256.png){: width="972" height="589"}
+
 3. We will swap out the crc32.C file for Tinycrypt source files for sha256. These files will be included in the bootloader project to calculate the sha256 as part of the bootloader verification of the application.
 
+First, get the TinyCrypt files from their official repository:
+Source: <https://github.com/intel/tinycrypt/tree/master>
+{: .prompt-warning }
+
+We will need the sha256.c sha256.h utils.c utils.h constants.h files divided into two folders inside the Bootloader/Core/Inc/tinycrypt and Bootloader/Core/Src/tinycrypt
+
+# Signature
