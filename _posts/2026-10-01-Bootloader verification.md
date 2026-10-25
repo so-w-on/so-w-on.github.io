@@ -11,10 +11,11 @@ The algorithms used will be swapped for more Post-quantum robust algorithms in a
 The setup uses an STM32 NUCLEO-F446RE board.
 
 The initial setup can be done following ControllersTech tutorial here (Part1-3):
+
 Source: <https://controllerstech.com/category/stm32/stm32-custom-bootloader-ota/>
 {: .prompt-warning }
 
-They use crc32 for verification, which we swap for sha256 from tinycrypt.
+The tutorial uses crc32 for verification, which we swap for sha256 from tinycrypt.
 
 # Tutorial Summary
 After going through the tutorial, we are left with a structure as can be seen below:
@@ -29,29 +30,29 @@ In the next steps, we will switch out the crc32 for a sha256 function. Then add 
 # SHA256
 The logic as was defined in the tutorial makes it quite easy to swap out the crc32 for sha256.
 1. First, we will modify the application header so that it contains a SHA256 hash and a signature (for the next step).
-
-```C
-typedef struct
-{
-    uint32_t magic;
-    uint32_t version; /* Image version for anti-rollback */
-    uint32_t size; /* Application size in bytes */
-    uint8_t hash[32]; /* SHA-256 of the application */
-    uint8_t signature[64]; /* signs the previous bytes of the header */
-} app_header_t;
-```
+    ```C
+        typedef struct
+        {
+            uint32_t magic;
+            uint32_t version; /* Image version for anti-rollback */
+            uint32_t size; /* Application size in bytes */
+            uint8_t hash[32]; /* SHA-256 of the application */
+            uint8_t signature[64]; /* signs the previous bytes of the header */
+        } app_header_t;
+    ```
 
 2. We will change the header_fill to calculate the sha256 digest instead of crc32 for the application integrity, which will then be added to the header of the application.
 
-The header_fill file stays pretty much the same aside from the swap to sha256 in the ahshing logic (Check the file in the github repo for more implementation specification)
-![Desktop View](/assets/img/bootloader/hash256.png){: width="972" height="589"}
+    The header_fill file stays pretty much the same aside from the swap to sha256 in the ahshing logic (Check the file in the github repo for more implementation specification)
+    ![Desktop View](/assets/img/bootloader/hash256.png){: width="972" height="589"}
 
 3. We will swap out the crc32.C file for Tinycrypt source files for sha256. These files will be included in the bootloader project to calculate the sha256 as part of the bootloader verification of the application.
 
-First, get the TinyCrypt files from their official repository:
-Source: <https://github.com/intel/tinycrypt/tree/master>
-{: .prompt-warning }
+    First, get the TinyCrypt files from their official repository:
 
-We will need the sha256.c sha256.h utils.c utils.h constants.h files divided into two folders inside the Bootloader/Core/Inc/tinycrypt and Bootloader/Core/Src/tinycrypt
+    Source: <https://github.com/intel/tinycrypt/tree/master>
+    {: .prompt-warning }
+
+    We will need the sha256.c sha256.h utils.c utils.h constants.h files divided into two folders inside the Bootloader/Core/Inc/tinycrypt and Bootloader/Core/Src/tinycrypt
 
 # Signature
