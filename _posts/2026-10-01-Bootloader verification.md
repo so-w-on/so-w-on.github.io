@@ -79,3 +79,18 @@ Then we reflash the normal application binary to test that it's still working we
 ![Desktop View](/assets/img/bootloader/return_to_normal_bin.png){: width="972" height="589"}
 
 # Signature
+The hash alone lets us avoid unintentional changes to the application that didn't result in a header update (to update the hash; the fingerprint). So we have integrity without authenticity.
+Therefore, we need a signature to ensure authenticity as well.
+
+## Process
+1. Generate a pair of ECDSA keys:
+    * a private one that stays in the backend (my computer)
+    * a public key that will be stored and use by the bootloader.
+
+2. Add the signature in the header_fill logic.
+3. Add signing logic to the bootloader verification function.
+
+At this stage, no write protection is available on the bootloader which defies the whole purpose, as we are storign the public key used for signature verification in the bootloader that can literally be overwritten by an attacker at this stage.
+{: .prompt-warning }
+
+We will look into this in a next step.
