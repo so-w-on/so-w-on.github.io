@@ -60,18 +60,22 @@ At the end of part3 of the tutorial, we will be able to have a successful jump f
 ![Desktop View](/assets/img/bootloader/Successful%20bootloader%20first%20step.png){: width="972" height="589"}
 
 It's interesting to read the header of the binary file through a hex editor (HexEd.it is used in the screenshot below)
+
 ![Desktop View](/assets/img/bootloader/header_structure_hexedit.png){: width="972" height="589"}
 We can see all the verification fields along with their values filled-in by the header_fill script.
 
 The next step is to use HexEd.it to modify each of these fields and save the modified file, then flash each one of them and read the output through PuTTY.
+
 ![Desktop View](/assets/img/bootloader/Error_bin_files.png){: width="960" height="589" .w-50 .right}
 ![Desktop View](/assets/img/bootloader/magic_error_bin_test.png){: width="960" height="589" .w-50 .left}
 
 More errors:
+
 ![Desktop View](/assets/img/bootloader/size_error_bin_test.png){: width="960" height="589" .w-50 .right}
 ![Desktop View](/assets/img/bootloader/hash_error_bin_test.png){: width="960" height="589" .w-50 .left}
 
 Then we reflash the normal application binary to test that it's still working well before going ahead to signatures and PQC:
+
 ![Desktop View](/assets/img/bootloader/return_to_normal_bin.png){: width="972" height="589"}
 
 # Signature
