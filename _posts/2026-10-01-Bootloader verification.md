@@ -30,16 +30,16 @@ In the next steps, we will switch out the crc32 for a sha256 function. Then add 
 # SHA256
 The logic as was defined in the tutorial makes it quite easy to swap out the crc32 for sha256.
 1. First, we will modify the application header so that it contains a SHA256 hash and a signature (for the next step).
-    ```C
-        typedef struct
-        {
-            uint32_t magic;
-            uint32_t version; /* Image version for anti-rollback */
-            uint32_t size; /* Application size in bytes */
-            uint8_t hash[32]; /* SHA-256 of the application */
-            uint8_t signature[64]; /* signs the previous bytes of the header */
-        } app_header_t;
-    ```
+```C
+    typedef struct
+    {
+        uint32_t magic;
+        uint32_t version; /* Image version for anti-rollback */
+        uint32_t size; /* Application size in bytes */
+        uint8_t hash[32]; /* SHA-256 of the application */
+        uint8_t signature[64]; /* signs the previous bytes of the header */
+    } app_header_t;
+```
 
 2. We will change the header_fill to calculate the sha256 digest instead of crc32 for the application integrity, which will then be added to the header of the application.
 
