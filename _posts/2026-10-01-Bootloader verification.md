@@ -15,7 +15,7 @@ The initial setup can be done following ControllersTech tutorial here (Part1-3):
 Source: <https://controllerstech.com/category/stm32/stm32-custom-bootloader-ota/>
 {: .prompt-warning }
 
-The tutorial uses crc32 for verification, which we swap for sha256 from tinycrypt.
+The tutorial uses crc32 for verification, which we swap for sha256 from tinycrypt, then for PQC algorithm in the next step.
 
 # Tutorial Summary
 After going through the tutorial, we are left with a structure as can be seen below:
@@ -43,7 +43,7 @@ The logic as was defined in the tutorial makes it quite easy to swap out the crc
 
 2. We will change the header_fill to calculate the sha256 digest instead of crc32 for the application integrity, which will then be added to the header of the application.
 
-    The header_fill file stays pretty much the same aside from the swap to sha256 in the ahshing logic (Check the file in the github repo for more implementation specification)
+    The header_fill file stays pretty much the same aside from the swap to sha256 in the hashing logic (Check the file in the github repo for more implementation specification)
     ![Desktop View](/assets/img/bootloader/hash256.png){: width="972" height="589"}
 
 3. We will swap out the crc32.C file for Tinycrypt source files for sha256. These files will be included in the bootloader project to calculate the sha256 as part of the bootloader verification of the application.
